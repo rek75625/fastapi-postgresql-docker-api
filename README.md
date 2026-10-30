@@ -5,21 +5,25 @@ A production-ready template for running a **FastAPI** application with a **Postg
 ---
 
 ## 🛠️ Tech Stack
-* **Backend:** FastAPI (Python 3.11+)
-* **Database:** PostgreSQL 15
-* **Containerization:** Docker & Docker Compose
-* **ORM/Migration (Optional):** SQLAlchemy / Alembic
+
+- **Backend:** FastAPI (Python 3.11+)
+- **Database:** PostgreSQL 15
+- **Containerization:** Docker & Docker Compose
+- **ORM/Migration (Optional):** SQLAlchemy / Alembic
 
 ---
 
 ## 🚀 Quick Start
 
 ### 1. Prerequisites
+
 Ensure you have the following installed on your machine:
-* [Docker Desktop](https://docker.com)
-* [Git](https://git-scm.com)
+
+- [Docker Desktop](https://docker.com)
+- [Git](https://git-scm.com)
 
 ### 2. Environment Setup
+
 Create a `.env` file in the root directory of your project to store database credentials and configurations:
 
 ```env
@@ -36,6 +40,7 @@ DATABASE_URL=postgresql://postgres:your_secure_password@db:5432/app_db
 ```
 
 ### 3. Spin Up the Containers
+
 Run the following command to build and launch the application and database in the background:
 
 ```bash
@@ -43,13 +48,15 @@ docker compose up -d --build
 ```
 
 The services will initialize on these ports:
-* 🌐 **FastAPI Server:** `http://localhost:8000`
-* 📑 **Interactive API Docs (Swagger UI):** `http://localhost:8000/docs`
-* 📊 **PostgreSQL Database:** `localhost:5432`
+
+- 🌐 **FastAPI Server:** `http://localhost:8000`
+- 📑 **Interactive API Docs (Swagger UI):** `http://localhost:8000/docs`
+- 📊 **PostgreSQL Database:** `localhost:5432`
 
 ---
 
 ## 📂 Project Structure
+
 ```text
 ├── app/
 │   ├── main.py          # FastAPI application entrypoint
@@ -69,6 +76,7 @@ The services will initialize on these ports:
 ## ⚙️ Docker Configuration Breakdown
 
 ### `Dockerfile` (App Service)
+
 ```dockerfile
 FROM python:3.11-slim
 
@@ -84,8 +92,9 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload
 ```
 
 ### `docker-compose.yml`
+
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   web:
@@ -123,16 +132,24 @@ volumes:
 
 ## 🛠️ Useful Management Commands
 
-| Action | Command |
-| :--- | :--- |
-| **Stop all services** | `docker compose down` |
-| **View real-time logs** | `docker compose logs -f` |
-| **View specific service logs** | `docker compose logs -f web` |
+| Action                           | Command                                             |
+| :------------------------------- | :-------------------------------------------------- |
+| **Stop all services**            | `docker compose down`                               |
+| **View real-time logs**          | `docker compose logs -f`                            |
+| **View specific service logs**   | `docker compose logs -f web`                        |
 | **Access PostgreSQL CLI (psql)** | `docker compose exec db psql -U postgres -d app_db` |
-| **Wipe database & volumes** | `docker compose down -v` |
+| **Wipe database & volumes**      | `docker compose down -v`                            |
 
 ---
 
 ## 🔒 Security Note
-* Never commit your actual `.env` file to version control systems like GitHub. 
-* Change default passwords (`your_secure_password`) before deploying code to production environments.
+
+- Never commit your actual `.env` file to version control systems like GitHub.
+- Change default passwords (`your_secure_password`) before deploying code to production environments.
+- uv venv and uv pip install -r .\requirements.txt
+- fastapi
+- uvicorn
+- SQLAlchemy
+- pydantic
+- psycopg2-binary
+- python-dotenv
