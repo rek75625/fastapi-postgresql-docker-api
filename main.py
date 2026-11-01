@@ -1,6 +1,8 @@
 import json
 from fastapi import FastAPI, HTTPException, Path, Query
 
+from model import StudentUpdate, Students
+
 app = FastAPI()
 
 # Robust Helper Function with error trapping
@@ -13,6 +15,14 @@ def loadData():
         return {} 
     except json.JSONDecodeError:
         return {}
+
+def saveData(data):
+    try:
+        with open("students.json", "w") as file:
+            json.dump(data, file, indent=4)
+    except Exception as e:
+        print(f"Error occurred while saving data: {e}")
+
 
 @app.get('/students')
 def students():
@@ -158,3 +168,39 @@ def paginations(page:int=Query(
         "students_per_page":studentsPerPage,
     }
     
+    
+
+@app.post("/create", status_code=201)
+def createStudent(student:Students):
+    data = loadData()
+    if student.id in data:
+        raise HTTPException(status_code=400, detail=f"Student with this id: {student.id} already exists")
+    data[student.id] = student.model_dump(exclude={"id","grade"})  # Use model_dump() to convert Pydantic model to dict
+    saveData(data)
+    return {"message": "Student created successfully", "student": student.model_dump()}
+
+# Update student by ID
+@app.put("/update/{std_id}")
+def updateStudent(studentUpdate: StudentUpdate, std_id: str = Path(...,description="ID of the student to update")):
+    data = loadData()
+    if std_id not in data:
+        raise HTTPException(status_code=404, detail=f"Student with id: {std_id} not found")
+    
+    # Update the student information
+    for attr, value in studentUpdate.model_dump(exclude_unset=True).items():
+        if value is not None:
+            data[std_id][attr] = value
+
+    saveData(data)
+    return {"message": "Student updated successfully", "student": data[std_id]}
+
+# Delete student by ID
+@app.delete("/delete/{std_id}")
+def deleteStudent(std_id: str = Path(...,description="ID of the student to delete")):
+    data = loadData()
+    if std_id not in data:
+        raise HTTPException(status_code=404, detail=f"Student with id: {std_id} not found")
+    
+    del data[std_id]
+    saveData(data)
+    return {"message": "Student deleted successfully"}

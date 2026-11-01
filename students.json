@@ -138,5 +138,12 @@
         "email": "anika.saxena@example.com",
         "course": "Machine Learning",
         "marks": 97
+    },
+    "S021": {
+        "name": "String",
+        "age": 1,
+        "course": "string",
+        "marks": 82,
+        "email": "user@example.com"
     }
 }
